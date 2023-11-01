@@ -13,6 +13,11 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ChatCompletionMessageParam } from "openai/resources/chat/completions";
+import { Empty } from "@/components/Empty";
+import { Loader } from "@/components/Loader";
+import { cn } from "@/lib/utils";
+import { UserAvatar } from "@/components/UserAvatar";
+import { BotAvatar } from "@/components/BotAvatar";
 
 const ConversationPage = () => {
   const router = useRouter();
@@ -93,9 +98,28 @@ const ConversationPage = () => {
           </Form>
         </div>
         <div className="mt-4 space-y-4">
-          <div className="flex flex-col-reverse gap-y-4">
+          {isLoading && (
+            <div className="p-8 rounded-lg w-full flex items-center justify-center">
+              <Loader />
+            </div>
+          )}
+          {messages.length === 0 && !isLoading && (
+            <Empty label="No conversation started" />
+          )}
+          <div className="flex flex-col-reverse gap-y-2 md:gap-y-4">
             {messages.map((message) => (
-              <div key={message.content}>{message.content}</div>
+              <div
+                key={message.content}
+                className={cn(
+                  "p-3 md:p-6 w-full flex items-start gap-x-3 md:gap-x-8 rounded-lg",
+                  message.role === "user"
+                    ? "bg-white border border-black/10"
+                    : "bg-slate-200"
+                )}
+              >
+                {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
+                <p className="text-sm">{message.content}</p>
+              </div>
             ))}
           </div>
         </div>
