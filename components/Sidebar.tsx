@@ -20,43 +20,43 @@ const monsterrat = Montserrat({ weight: "600", subsets: ["latin"] });
 
 const routes = [
   {
-    level: "Dashboard",
+    lebel: "Dashboard",
     icon: LayoutDashboard,
     href: "/dashboard",
     color: "text-sky-500",
   },
   {
-    level: "Conversation",
+    lebel: "Conversation",
     icon: MessageSquare,
     href: "/conversation",
     color: "text-violet-500",
   },
   {
-    level: "Image Generation",
+    lebel: "Image Generation",
     icon: ImageIcon,
     href: "/image",
     color: "text-pink-700",
   },
   {
-    level: "Video Generation",
+    lebel: "Video Generation",
     icon: VideoIcon,
     href: "/video",
     color: "text-orange-700",
   },
   {
-    level: "Music Generation",
+    lebel: "Music Generation",
     icon: Music,
     href: "/music",
     color: "text-emerald-500",
   },
   {
-    level: "Code Generation",
+    lebel: "Code Generation",
     icon: Code,
     href: "/code",
     color: "text-green-700",
   },
   {
-    level: "Settings",
+    lebel: "Settings",
     icon: Settings,
     href: "/settings",
   },
@@ -91,7 +91,7 @@ const Sideber = () => {
             >
               <div className="flex items-center flex-1">
                 <route.icon className={cn("h-5 w-5 mr-3", route.color)} />
-                {route.level}
+                {route.lebel}
               </div>
             </Link>
           ))}
