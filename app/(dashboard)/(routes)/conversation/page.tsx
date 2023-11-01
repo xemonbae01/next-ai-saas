@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import * as z from "zod";
 import { Heading } from "@/components/Heading";
 import { MessageSquare } from "lucide-react";
@@ -9,8 +10,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { ChatCompletionMessageParam } from "openai/resources/chat/completions";
 
 const ConversationPage = () => {
+  const router = useRouter();
+  const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -21,7 +28,28 @@ const ConversationPage = () => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (value: z.infer<typeof formSchema>) => {
-    console.log(value);
+    try {
+      const userMessage: ChatCompletionMessageParam = {
+        role: "user",
+        content: value.prompt,
+      };
+
+      const newMessage = [...messages, userMessage];
+
+      const response = await axios.post("/api/conversation", {
+        messages: newMessage,
+      });
+
+      setMessages((current) => [...current, userMessage, response.data]);
+
+      //to clear the imput inside th form
+      form.reset();
+    } catch (error) {
+      //TO DO Open Pro Modal
+      console.log(error);
+    } finally {
+      router.refresh();
+    }
   };
 
   return (
@@ -64,7 +92,13 @@ const ConversationPage = () => {
             </form>
           </Form>
         </div>
-        <div className="mt-4 space-y-4">Messages Content</div>
+        <div className="mt-4 space-y-4">
+          <div className="flex flex-col-reverse gap-y-4">
+            {messages.map((message) => (
+              <div key={message.content}>{message.content}</div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
