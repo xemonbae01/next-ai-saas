@@ -2,6 +2,8 @@ import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import Replicate from "replicate";
 
+import { incressApiLimit, checkApiLimit } from "@/lib/ApiLimit";
+
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_KEY,
 });
@@ -18,6 +20,13 @@ export async function POST(req: Request) {
 
     if (!prompt) {
       return new NextResponse("Music prompt is required", { status: 400 });
+    }
+
+    //fetching userApiLimit from prismadb
+    const freeTrial = await checkApiLimit();
+
+    if (!freeTrial) {
+      return new NextResponse("Free trial has been expired", { status: 403 });
     }
 
     //***this is a lengthly process without webhook**
@@ -48,6 +57,9 @@ export async function POST(req: Request) {
         },
       }
     );
+
+    //updating userApiLimit count to prismadb
+    await incressApiLimit();
 
     return NextResponse.json(response);
   } catch (error) {
