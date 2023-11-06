@@ -3,8 +3,10 @@
 import { Montserrat } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
+import { FreeCounter } from "@/components/FreeCounter";
 import {
   LayoutDashboard,
   MessageSquare,
@@ -14,7 +16,6 @@ import {
   Code,
   Settings,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
 
 const monsterrat = Montserrat({ weight: "600", subsets: ["latin"] });
 
@@ -62,7 +63,11 @@ const routes = [
   },
 ];
 
-const Sideber = () => {
+interface SidebarProps {
+  apiLimitCount: number;
+}
+
+const Sideber = ({ apiLimitCount = 0 }: SidebarProps) => {
   const pathName = usePathname();
 
   return (
@@ -97,6 +102,7 @@ const Sideber = () => {
           ))}
         </div>
       </div>
+      <FreeCounter apiLimitCount={apiLimitCount} />
     </div>
   );
 };
