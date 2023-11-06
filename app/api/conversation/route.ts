@@ -2,6 +2,8 @@ import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
+import { incressApiLimit, checkApiLimit } from "@/lib/ApiLimit";
+
 //Open Initialization and setup
 const openai = new OpenAI({
   apiKey: process.env.OPEN_AI_KEY,
@@ -25,11 +27,21 @@ export async function POST(req: Request) {
       return new NextResponse("Message are required", { status: 400 });
     }
 
+    //fetching userApiLimit from prismadb
+    const freeTrial = await checkApiLimit();
+
+    if (!freeTrial) {
+      return new NextResponse("Free trial has been expired", { status: 403 });
+    }
+
     //Creating a chat completion
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages,
     });
+
+    //updating userApiLimit count to prismadb
+    await incressApiLimit();
 
     return NextResponse.json(response.choices[0].message);
   } catch (error) {
