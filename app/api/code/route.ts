@@ -4,6 +4,7 @@ import OpenAI from "openai";
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 
 import { incressApiLimit, checkApiLimit } from "@/lib/ApiLimit";
+import { checkSubscription } from "@/lib/subscription";
 
 //Open Initialization and setup
 const openai = new OpenAI({
@@ -37,7 +38,10 @@ export async function POST(req: Request) {
     //fetching userApiLimit from prismadb
     const freeTrial = await checkApiLimit();
 
-    if (!freeTrial) {
+    //checking if the use has a Pro Plan activated
+    const isPro = await checkSubscription();
+
+    if (!freeTrial && !isPro) {
       return new NextResponse("Free trial has been expired", { status: 403 });
     }
 
@@ -48,7 +52,12 @@ export async function POST(req: Request) {
     });
 
     //updating userApiLimit count to prismadb
-    await incressApiLimit();
+    //await incressApiLimit();
+
+    //we won't increase ApiLimit data if user is in Pro plan
+    if (!isPro) {
+      await incressApiLimit();
+    }
 
     return NextResponse.json(response.choices[0].message);
   } catch (error) {

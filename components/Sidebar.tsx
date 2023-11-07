@@ -65,9 +65,10 @@ const routes = [
 
 interface SidebarProps {
   apiLimitCount: number;
+  isPro: boolean;
 }
 
-const Sideber = ({ apiLimitCount = 0 }: SidebarProps) => {
+const Sideber = ({ apiLimitCount = 0, isPro = false }: SidebarProps) => {
   const pathName = usePathname();
 
   return (
@@ -102,7 +103,7 @@ const Sideber = ({ apiLimitCount = 0 }: SidebarProps) => {
           ))}
         </div>
       </div>
-      <FreeCounter apiLimitCount={apiLimitCount} />
+      <FreeCounter apiLimitCount={apiLimitCount} isPro={isPro} />
     </div>
   );
 };

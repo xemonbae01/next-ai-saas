@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Zap } from "lucide-react";
+import { Flag, Zap } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { MAX_FREE_COUNTS } from "@/constants";
@@ -11,9 +11,13 @@ import { useProModel } from "@/hooks/UseProModel";
 
 interface FreeCounterProps {
   apiLimitCount: number;
+  isPro: boolean;
 }
 
-export const FreeCounter = ({ apiLimitCount = 0 }: FreeCounterProps) => {
+export const FreeCounter = ({
+  apiLimitCount = 0,
+  isPro = false,
+}: FreeCounterProps) => {
   const proModel = useProModel();
   const [mounted, setMounted] = useState(false);
 
@@ -22,6 +26,10 @@ export const FreeCounter = ({ apiLimitCount = 0 }: FreeCounterProps) => {
   }, []);
 
   if (!mounted) {
+    return null;
+  }
+
+  if (isPro) {
     return null;
   }
 
