@@ -6,7 +6,11 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Sideber from "@/components/Sidebar";
 import { useEffect, useState } from "react";
 
-const MobileSidebar = () => {
+interface MobileSidebarProps {
+  apiLimitCount: number;
+}
+
+const MobileSidebar = ({ apiLimitCount }: MobileSidebarProps) => {
   const [isMounted, setIsMounted] = useState(false);
 
   //this code is for ("Unhandled Runtime Error" Error: Hydration failed because the initial UI does not match what was rendered on the server.)
@@ -27,7 +31,7 @@ const MobileSidebar = () => {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="p-0">
-        <Sideber />
+        <Sideber apiLimitCount={apiLimitCount} />
       </SheetContent>
     </Sheet>
   );
