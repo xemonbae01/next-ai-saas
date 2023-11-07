@@ -8,10 +8,10 @@ const LandingPage = () => {
       <h1>This is the landing page</h1>
       <div>
         <Link href={"/sign-in"}>
-          <Button>Log In</Button>
+          <Button>Sign In</Button>
         </Link>
         <Link href={"/sign-up"}>
-          <Button>Log Up</Button>
+          <Button>Sign Up</Button>
         </Link>
       </div>
     </div>

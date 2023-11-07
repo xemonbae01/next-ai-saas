@@ -15,8 +15,10 @@ import { useRouter } from "next/navigation";
 import { Heading } from "@/components/Heading";
 import { Empty } from "@/components/Empty";
 import { Loader } from "@/components/Loader";
+import { useProModel } from "@/hooks/UseProModel";
 
 const VideoPage = () => {
+  const proModel = useProModel();
   const router = useRouter();
   const [video, setVideo] = useState<string>();
 
@@ -43,9 +45,11 @@ const VideoPage = () => {
 
       //to clear the imput inside th form
       form.reset();
-    } catch (error) {
-      //TO DO Open Pro Modal
-      console.log(error);
+    } catch (error: any) {
+      //opening ProMode is use got 403 error
+      if (error?.response?.status === 403) {
+        proModel.onOpen();
+      }
     } finally {
       router.refresh();
     }

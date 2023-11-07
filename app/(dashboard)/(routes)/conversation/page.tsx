@@ -18,8 +18,10 @@ import { Loader } from "@/components/Loader";
 import { cn } from "@/lib/utils";
 import { UserAvatar } from "@/components/UserAvatar";
 import { BotAvatar } from "@/components/BotAvatar";
+import { useProModel } from "@/hooks/UseProModel";
 
 const ConversationPage = () => {
+  const proModel = useProModel();
   const router = useRouter();
   const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([]);
 
@@ -49,9 +51,11 @@ const ConversationPage = () => {
 
       //to clear the imput inside th form
       form.reset();
-    } catch (error) {
-      //TO DO Open Pro Modal
-      console.log(error);
+    } catch (error: any) {
+      //opening ProMode is use got 403 error
+      if (error?.response?.status === 403) {
+        proModel.onOpen();
+      }
     } finally {
       router.refresh();
     }

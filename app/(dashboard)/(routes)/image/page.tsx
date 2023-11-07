@@ -25,8 +25,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardFooter } from "@/components/ui/card";
+import { useProModel } from "@/hooks/UseProModel";
 
 const ImagePage = () => {
+  const proModel = useProModel();
   const router = useRouter();
   const [images, SetImages] = useState<string[]>([]);
 
@@ -50,9 +52,11 @@ const ImagePage = () => {
       SetImages(urls);
       //to clear the imput inside th form
       form.reset();
-    } catch (error) {
-      //TO DO Open Pro Modal
-      console.log(error);
+    } catch (error: any) {
+      //opening ProMode is use got 403 error
+      if (error?.response?.status === 403) {
+        proModel.onOpen();
+      }
     } finally {
       router.refresh();
     }
