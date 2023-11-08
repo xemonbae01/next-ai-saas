@@ -39,6 +39,11 @@ const CodePage = () => {
 
   const onSubmit = async (value: z.infer<typeof formSchema>) => {
     try {
+      //if only need to shwo a toast but execute the fn
+      //toast("something")
+
+      //we can use error default by throw new Error. Won't execute fn
+      // throw new Error("Wrong");
       const userMessage: ChatCompletionMessageParam = {
         role: "user",
         content: value.prompt,

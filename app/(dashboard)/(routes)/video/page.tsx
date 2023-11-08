@@ -36,6 +36,11 @@ const VideoPage = () => {
 
   const onSubmit = async (value: z.infer<typeof formSchema>) => {
     try {
+      //if only need to shwo a toast but execute the fn
+      //toast("something")
+
+      //we can use error default by throw new Error. Won't execute fn
+      // throw new Error("Wrong");
       setVideo(undefined);
 
       const response = await axios.post("/api/video", value);
