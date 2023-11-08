@@ -1,17 +1,19 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import axios from "axios";
 import * as z from "zod";
-import { Heading } from "@/components/Heading";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { MessageSquare } from "lucide-react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+
 import { formSchema } from "./constants";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Heading } from "@/components/Heading";
 import { Form, FormField, FormItem, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { ChatCompletionMessageParam } from "openai/resources/chat/completions";
 import { Empty } from "@/components/Empty";
 import { Loader } from "@/components/Loader";
@@ -55,6 +57,8 @@ const ConversationPage = () => {
       //opening ProMode is use got 403 error
       if (error?.response?.status === 403) {
         proModel.onOpen();
+      } else {
+        toast.error("Something went wrong");
       }
     } finally {
       router.refresh();

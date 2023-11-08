@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 import {
   Dialog,
@@ -71,7 +72,7 @@ export const ProModel = () => {
       //window.location.href = (await response).data.url;
       window.location.href = response.data.url;
     } catch (error) {
-      console.log("STRIPE_CLIENT_ERROR", error);
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -108,6 +109,7 @@ export const ProModel = () => {
         </DialogHeader>
         <DialogFooter>
           <Button
+            disabled={loading}
             onClick={onSubscribe}
             size="lg"
             variant="premium"

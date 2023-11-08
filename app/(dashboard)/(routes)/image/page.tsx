@@ -7,6 +7,7 @@ import { Download, ImageIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 import { amountOptions, formSchema, resolutionOptions } from "./constants";
 import { Heading } from "@/components/Heading";
@@ -56,6 +57,8 @@ const ImagePage = () => {
       //opening ProMode is use got 403 error
       if (error?.response?.status === 403) {
         proModel.onOpen();
+      } else {
+        toast.error("Something went wrong");
       }
     } finally {
       router.refresh();

@@ -9,6 +9,7 @@ import { formSchema } from "./constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import ReactMarkwond from "react-markdown";
+import toast from "react-hot-toast";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -57,6 +58,8 @@ const CodePage = () => {
       //opening ProMode is use got 403 error
       if (error?.response?.status === 403) {
         proModel.onOpen();
+      } else {
+        toast.error("Something went wrong");
       }
     } finally {
       router.refresh();
